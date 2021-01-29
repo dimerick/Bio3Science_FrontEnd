@@ -1,0 +1,45 @@
+<section>
+    <div class="container" id="contSignInForm">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-12">
+                <div class="feature feature-1">
+                    <div class="feature__body boxed boxed--lg boxed--border text-center">
+                        <div class="modal-close modal-close-cross"></div>
+                        <div class="text-block">
+                            <h3>Login to your account</h3>
+                            <p>
+                                Welcome back, sign in with your existing account credentials.
+                            </p>
+                        </div>
+                        <form [formGroup]="signInForm" (ngSubmit)="onSubmit()">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Email:</label>
+                                    <input type="email" placeholder="Email" formControlName="email">
+                                    <p *ngIf="signInForm.get('email').invalid && signInForm.get('email').touched" class="color--error text-left">Your email is required</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <label>Password:</label>
+                                    <input type="password" placeholder="Password" formControlName="password">
+                                    <p *ngIf="signInForm.get('password').invalid && signInForm.get('password').touched" class="color--error text-left">Your passsword is required</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <button class="btn btn--primary type--uppercase" type="submit">Login</button>
+                                </div>
+                            </div>
+                            <!--end of row-->
+                        </form>
+                        <span class="type--fine-print block">Dont have an account yet?
+                            <a [routerLink]="['/signup']">Create account</a>
+                        </span>
+                        <!-- <span class="type--fine-print block">Forgot your username or password?
+                            <a [routerLink]="['/recovery-password']">Recover account</a>
+                        </span> -->
+                    </div>
+                </div>
+                <!--end feature-->
+            </div>
+        </div>
+        <!--end of row-->
+    </div>
+</section>

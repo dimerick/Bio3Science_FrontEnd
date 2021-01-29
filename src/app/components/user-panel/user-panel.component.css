@@ -1,0 +1,46 @@
+#user-panel{
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 10000; /* Stay on top */
+    top: 0; /* Stay at the top */
+    right: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding: 0px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidenav */
+    color: white;
+}
+
+
+#user-panel.active{
+    width: 50%;
+}
+
+@media (max-width: 767px) {
+    #user-panel.active{
+        width: 100%;
+    }
+  }
+
+#user-panel .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  .current-user{
+      display: flex;
+      align-items: center;
+      padding: 20px;
+  }
+  .current-user a{
+      color: white;
+  }
+
+  #user-panel .content{
+      background-color: white;
+      height: 100%;
+      padding: 20px;
+  }

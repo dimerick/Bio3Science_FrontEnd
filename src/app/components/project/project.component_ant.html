@@ -1,0 +1,127 @@
+<div class="modal" [ngClass]="{'is-active':modalAddUniversityActive}">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <app-university 
+      (universiyRegisteredEvent)="eventUniversityRegistered($event)"
+      ></app-university>
+    </div>
+    <button (click)="toggleAddUniversity()" class="modal-close is-large" aria-label="close"></button>
+  </div>
+
+  <div class="modal" [ngClass]="{'is-active':modalAddCommunityActive}">
+    <div class="modal-background"></div>
+    <div class="modal-content">
+      <app-community 
+      (communityRegisteredEvent)="eventCommunityRegistered($event)"
+      ></app-community>
+    </div>
+    <button (click)="toggleAddCommunity()" class="modal-close is-large" aria-label="close"></button>
+  </div>
+
+  <div class="column is-half is-offset-one-quarter bd-lead">
+    <div class="box">
+        <h1 class="title is-3" id="form-title">Project</h1>
+        <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
+
+          <div class="field">
+            <label class="label">Nombre</label>
+            <div class="control">
+                <ng-select class="custom" id="project-select" 
+              [items]="projects" 
+              bindLabel="name"
+               bindValue="id" 
+               formControlName="project" 
+               placeholder="Ingrese el nombre del proyecto" 
+               [addTag]="addProject" 
+               (change)="onChangeProject($event)"
+              ></ng-select>
+            </div>
+            <p *ngIf="projectForm.get('project').invalid && projectForm.get('project').touched" class="help is-danger">Debes
+              ingresar el nombre del proyecto</p>
+          </div>
+
+          <div class="field">
+            <label class="label">Descripción</label>
+            <div class="control">
+              <textarea id="description" class="textarea" placeholder="Ingrese la descripción del proyecto" formControlName="description"></textarea>
+            </div>
+            <p *ngIf="projectForm.get('description').invalid && projectForm.get('description').touched" class="help is-danger">Debes
+              ingresar la descripción del proyecto</p>
+          </div>
+
+          <div class="field">
+            <label class="label">Universidad</label>
+            <div class="control">
+              <ng-select class="custom" 
+              [items]="universities" 
+              bindLabel="name"
+               bindValue="id" 
+               formControlName="university" 
+               placeholder="Ingrese el nombre de la universidad donde se esta adelantando el proyecto" 
+               (change)="onChangeUniversity($event)"
+              ></ng-select>
+              <p *ngIf="projectForm.get('university').invalid && projectForm.get('university').touched" class="help is-danger">Debes
+                ingresar la universidad en donde se está adelantando el proyecto</p>
+              <br> 
+              <p><a (click)="toggleAddUniversity()">¿Agregar una nueva universidad?</a></p>
+              <br>
+              
+                  <div *ngIf="lat != 200 && lon != 200">
+                    <app-map [lat]="lat" [lon]="lon" [markerDraggable]="false" [markerActive]="true" [zoom]="15" [height]="300" [layers]="layers"
+                        (markerMovedEvent)="markerMoved($event)"></app-map>
+                      </div>
+                
+              
+              
+            </div>
+            
+          </div>
+
+          <div class="field">
+            <label class="label">Universidades Asociadas</label>
+            <div class="control">
+              <ng-select class="custom" 
+              [items]="universitiesAssociated" 
+              bindLabel="name"
+               bindValue="id" 
+               formControlName="universitiesAssociated" 
+               placeholder="Ingrese el nombres de las universidades asociadas al proyecto" 
+               (change)="onChangeUniversitiesAssociated($event)" 
+               [multiple]="true"
+              ></ng-select>
+              
+              <p><a (click)="toggleAddUniversity()">¿Agregar una nueva universidad?</a></p>
+              <br>              
+              
+            </div>
+            
+          </div>
+
+          <div class="field">
+            <label class="label">Comunidades Asociadas</label>
+            <div class="control">
+              <ng-select class="custom" 
+              [items]="communitiesAssociated" 
+              bindLabel="name"
+               bindValue="id" 
+               formControlName="communitiesAssociated" 
+               placeholder="Ingrese el nombres de las comunidades asociadas al proyecto" 
+               (change)="onChangeCommunitiesAssociated($event)" 
+               [multiple]="true"
+              ></ng-select>
+              
+              <p><a (click)="toggleAddCommunity()">¿Agregar una nueva comunidad?</a></p>
+              <br>              
+              
+            </div>
+            
+          </div>
+
+          <div class="control">
+            <input type="submit" value="Enviar" class="button is-link"
+            [disabled]="projectForm.invalid">
+          </div>
+
+        </form>
+    </div>
+</div>

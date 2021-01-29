@@ -1,0 +1,82 @@
+<section>
+
+
+<div class="container" *ngIf="project">
+    <div class="col-md-12">
+
+        <ol class="breadcrumbs">
+            <li>
+                <a [routerLink]="['/gallery']">Projects</a>
+            </li>
+            <li>{{project.name}}</li>
+        </ol>
+        <hr>
+    </div>
+</div>
+</section>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div *ngIf="project">
+
+                <h1>{{project.name}}</h1>
+                <p>
+                    <i class="fa fa-university fa-1x" aria-hidden="true" title="University"></i>
+                    {{project.universidad}}
+                    <br>
+                    <i class="fa fa-calendar fa-1x" aria-hidden="true" title="Date"></i>
+                    {{project.created_at | date : 'longDate'}}
+                    <br>
+                    <i class="fa fa-user fa-1x" aria-hidden="true" title="Date"></i>
+                    <a href="/profile/{{project.created_by}}"> {{project.user_name}} {{project.user_last_name}}</a>
+                </p>
+                <p class="lead p-formatted">
+                    {{project.description}}
+                </p>
+
+
+
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div *ngIf="lat != 200 && lon != 200">
+                <app-map
+                [lat]="lat" 
+                [lon]="lon" 
+                [markerActive]="false" 
+                [zoom]="15" 
+                [height]="400" 
+                [layers]="layers" 
+                (markerMovedEvent)="markerMoved($event)" 
+                (mapReadyEvent)="mapReady($event)" 
+                (mapZoomEndEvent)="mapZoomEnd($event)"
+                (onMapMoveEndEvent)="mapMoveEnd($event)" 
+                (onMapSizeEvent)="mapSizeChange($event)"
+                ></app-map>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<section class="text-center " *ngIf="galleryActive">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-lg-8">
+                <h2>Gallery</h2>
+                <div class="row">
+                    <div class="col-md-4" *ngFor="let image of project.images">
+                        <a href="{{image.url}}" data-lightbox="Gallery 1">
+                            <img alt="Image {{project.name}}" src="{{image.url}}">
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
+</section>

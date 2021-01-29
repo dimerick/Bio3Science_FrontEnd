@@ -1,0 +1,46 @@
+<section>
+<div class="container">
+
+<div class="row justify-content-center">
+
+<div class="col-lg-8">
+
+    <div class="boxed boxed--border">
+        <h4>Recent Activity</h4>
+        <div *ngIf="projects">
+            <div *ngIf="projects.length == 0">
+                Aun no tiene publicaciones!!
+            </div>
+            
+        </div>
+        <ul>
+            <li class="clearfix" *ngFor="let project of projects">
+                <div class="row">
+                    <div class="col-lg-2 col-3 text-center">
+                        <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
+                    </div>
+                    <div class="col-lg-8 col-7">
+                        <span class="type--fine-print">{{project.created_at | date : 'longDate'}}</span>
+                        <a href="#" class="block color--primary">{{project.name}}</a>
+                        <p>
+                            {{project.description}}
+                        </p>
+                        <!-- <span><a href="">Editar</a></span>  -->
+                        <span><a href="javascript: void(0)" (click)="deleteProject(project)">Eliminar</a> </span>
+                    </div>
+                </div>
+                <hr>
+            </li>
+            
+        </ul>
+        
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+

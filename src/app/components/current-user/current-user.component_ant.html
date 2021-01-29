@@ -1,0 +1,55 @@
+   
+  <div *ngIf="!logged && !loadingDataUser" class="logged">
+      <div class="navbar-item">
+        <div class="buttons">
+          <a [routerLink]="['/registro']" class="button is-primary">
+            <strong>Sign up</strong>
+          </a>
+          <a [routerLink]="['/login']" class="button is-light">
+            Log in
+          </a>
+        </div>
+      </div>
+
+</div>
+
+    <div *ngIf="logged" class="logged">
+
+      
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          {{currentUser.name}}
+        </a>
+
+        <div class="navbar-dropdown">
+          <a class="navbar-item">
+            Mi Perfil
+          </a>
+          <hr class="navbar-divider">
+          <a (click)="logout()" class="navbar-item">
+            Cerrar Sesión
+          </a>
+        </div>
+      </div>
+        
+        
+    </div>
+    
+
+
+
+
+<!-- <app-signin [modalActive]="signInActive"
+    (eventSignInModalClose)="signInModalClose($event)"
+    ></app-signin> -->
+    
+    <!-- <app-signup [modalActive]="signUpActive"
+    (eventSignUpModalClose)="signUpModalClose($event)"
+    ></app-signup> -->
+
+<!-- <app-user-panel 
+[panelActive]="userPanelActive" 
+[currentUser]="currentUser" 
+(eventUserPanelClose)="closeUserPanel($event)"
+></app-user-panel> -->

@@ -1,0 +1,192 @@
+<div class="container">
+<div class="modal" [ngClass]="{'is-active':modalAddUniversityActive}">
+  <div class="modal-background"></div>
+  <div class="modal-content">
+    <app-university 
+    (universiyRegisteredEvent)="universiyRegistered($event)"
+    ></app-university>
+  </div>
+  <button (click)="toggleAddUniversity()" class="modal-close is-large" aria-label="close"></button>
+</div>
+</div>
+
+<div class="column is-half is-offset-one-quarter bd-lead">
+  <div class="box">
+    <h1 class="title is-1">Sign Up</h1>
+    <form [formGroup]="signUpForm" (ngSubmit)="onSubmit()">
+
+      <div class="field">
+        <label class="label">Nombre</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Ingrese su nombre" name="name" formControlName="name">
+        </div>
+        <p *ngIf="signUpForm.get('name').invalid && signUpForm.get('name').touched" class="help is-danger">Debes
+          ingresar tu nombre</p>
+      </div>
+
+
+      <div class="field">
+        <label class="label">Apellido</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Ingrese su apellido" name="last_name" formControlName="last_name">
+        </div>
+        <p *ngIf="signUpForm.get('last_name').invalid && signUpForm.get('last_name').touched" class="help is-danger">Debes
+          ingresar tu apellido</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+          <input class="input" type="email" placeholder="Ingrese su email" name="email" formControlName="email">
+        </div>
+        <div *ngIf="signUpForm.get('email').errors">
+          <p *ngIf="signUpForm.get('email').errors.required && signUpForm.get('email').touched" class="help is-danger">
+            Debes ingresar tu email</p>
+          <p *ngIf="signUpForm.get('email').errors.pattern && signUpForm.get('email').touched" class="help is-danger">
+            Ingrese un email valido</p>
+          <p *ngIf="signUpForm.get('email').errors.existe && signUpForm.get('email').touched" class="help is-danger">El
+            email ya fue registrado</p>
+        </div>
+
+      </div>
+
+      <div class="field">
+        <label class="label">Degree</label>
+        <div class="control has-icons-left">
+          <div class="select">
+            <select formControlName="degree">
+              <option *ngFor="let degree of degrees; let i = index" [value]="degrees[i].id">
+                {{degrees[i].name}}
+              </option>
+            </select>
+          </div>
+          <div class="icon is-small is-left">
+            <i class="fa fa-graduation-cap"></i>
+          </div>
+        </div>
+        <p *ngIf="signUpForm.get('degree').invalid && signUpForm.get('degree').touched" class="help is-danger">Debes
+          indicar tus niveles de estudio</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Field of Study</label>
+        <div class="control has-icons-left">
+          <div class="select">
+            <select formControlName="field_of_study">
+              <option *ngFor="let field of fieldsOfStudy; let i = index" [value]="fieldsOfStudy[i].id">
+                {{fieldsOfStudy[i].name}}
+              </option>
+            </select>
+          </div>
+          <div class="icon is-small is-left">
+            <i class="fa fa-graduation-cap"></i>
+          </div>
+        </div>
+        <p *ngIf="signUpForm.get('field_of_study').invalid && signUpForm.get('field_of_study').touched" class="help is-danger">Debes
+          indicar tu principal area de estudio</p>
+      </div>
+      <div class="field">
+        <label class="label">Descripción Personal (área de experticia, intereses)</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Ingrese su descripción personal" formControlName="description"></textarea>
+        </div>
+        <p *ngIf="signUpForm.get('description').invalid && signUpForm.get('description').touched" class="help is-danger">Debes
+          ingresar tu descripción personal</p>
+      </div>
+
+      <div class="field">
+        <label class="label">Universidad</label>
+        <div class="control">
+          <ng-select class="custom" 
+          [items]="universities" 
+          bindLabel="name"
+           bindValue="id" 
+           formControlName="university" 
+           placeholder="Ingrese el nombre de su universidad" 
+           (change)="onChange($event)"
+          ></ng-select>
+          <p *ngIf="signUpForm.get('university').invalid && signUpForm.get('university').touched" class="help is-danger">Debes
+            ingresar la universidad a la cual estas adscrito</p>
+          <br> 
+          <p><a (click)="toggleAddUniversity()">¿Agregar una nueva universidad?</a></p>
+          <br>
+          
+              <div *ngIf="lat != 200 && lon != 200">
+                <app-map [lat]="lat" [lon]="lon" [markerDraggable]="false" [markerActive]="true" [zoom]="15" [height]="300" [layers]="layers"
+                    (markerMovedEvent)="markerMoved($event)"></app-map>
+                  </div>
+            
+          
+          
+        </div>
+        
+      </div>
+
+      <div class="field">
+        <div class="control">
+          
+        </div>
+      </div>
+
+      <!-- <div class="field">
+        <label class="label">Universidad</label>
+        <div class="control">
+          <input class="input" type="text" placeholder="Ingrese su universidad" name="university" formControlName="university">
+        </div>
+        <p *ngIf="signUpForm.get('university').invalid && signUpForm.get('university').touched" class="help is-danger">Debes
+          ingresar la universidad a la cual estas adscrito</p>
+      </div> -->
+
+
+
+      <!-- <div class="field">
+        <label class="label">Ubicación Universidad <br> </label>
+        <em>Arrastre el marcador hasta la ubicacion deseadas</em>
+        <div class="control">
+          <div *ngIf="lat != 200 && lon != 200">
+            <app-map [lat]="lat" [lon]="lon" [markerActive]="true" [zoom]="15" [height]="300" [layers]="layers"
+              (markerMovedEvent)="markerMoved($event)"></app-map>
+          </div>
+        </div>
+      </div> -->
+
+      <div class="field">
+        <label class="label">links Websites</label>
+        <div class="control">
+          <textarea class="textarea" placeholder="Ingrese los links de sus publicaciones" formControlName="websites"></textarea>
+        </div>
+        <p *ngIf="signUpForm.get('websites').invalid && signUpForm.get('websites').touched" class="help is-danger">Debes
+          ingresar los links de tus publicaciones</p>
+      </div>
+
+      
+
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input class="input" type="password" placeholder="Ingrese su contraseña" name="password"
+            formControlName="password">
+        </div>
+        <p *ngIf="signUpForm.get('password').invalid && signUpForm.get('password').touched" class="help is-danger">Debes
+          ingresar tu contraseña</p>
+      </div>
+
+
+      <div class="field">
+        <label class="label">Confirmar Password</label>
+        <div class="control">
+          <input class="input" type="password" placeholder="Repita la contraseña" name="confirmPassword"
+            formControlName="confirmPassword">
+        </div>
+        <p *ngIf="noMatchPasswords() && signUpForm.get('confirmPassword').touched" class="help is-danger">Las
+          contraseñas no coinciden</p>
+      </div>
+
+      <div class="control">
+        <input type="submit" value="Enviar" class="button is-link"
+        [disabled]="signUpForm.invalid">
+      </div>
+
+    </form>
+  </div>
+</div>

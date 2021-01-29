@@ -1,0 +1,49 @@
+
+    <div class="box">
+        <h1 class="title is-3">Community</h1>
+        <form [formGroup]="communityForm" (ngSubmit)="onSubmit()">
+
+          <div class="field">
+            <label class="label">Nombre</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Ingrese el nombre de la comunidad" name="name" formControlName="name">
+            </div>
+            <p *ngIf="communityForm.get('name').invalid && communityForm.get('name').touched" class="help is-danger">Debes
+              ingresar el nombre de la comunidad</p>
+          </div>
+            
+              <!-- <div class="field">
+                <label class="label">Nombre</label>
+                <div class="control">
+                  <ng-select class="custom" 
+                  [items]="items" 
+                  bindLabel="name"
+                   bindValue="id" 
+                   formControlName="name" 
+                   placeholder="Ingrese el nombre de su universidad" 
+                   (change)="onChange($event)"
+                  ></ng-select>
+                  <p *ngIf="communityForm.get('name').invalid && communityForm.get('name').touched" class="help is-danger">Debes ingresar el nombre de tu universidad</p>
+                </div>
+                
+              </div> -->
+
+              <div class="field">
+                <label class="label">Ubicación Comunidad <br> </label>
+                <em>Arrastre el marcador hasta la ubicacion deseada</em>
+                <div class="control">
+                  <div *ngIf="lat != 200 && lon != 200">
+                    <app-map [markerDraggable]="true" [lat]="lat" [lon]="lon" [markerActive]="true" [zoom]="15" [height]="300" [layers]="layers"
+                      (markerMovedEvent)="markerMoved($event)"></app-map>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="control">
+                <input type="submit" value="Enviar" class="button is-link" [disabled]="communityForm.invalid">
+              </div>
+      
+        </form>
+    </div>
+
+

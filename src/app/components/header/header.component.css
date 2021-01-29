@@ -1,0 +1,13 @@
+.navbar-item img {
+    max-height: 100rem;
+}
+
+nav{
+    margin-bottom: 40px;
+}
+.navbar{
+    z-index: 1000!important;
+}
+#row-menu{
+    align-items: center!important;
+}

@@ -1,0 +1,38 @@
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="text-block">
+                <h3>Community</h3>
+                <p>
+                    
+                </p>
+            </div>
+            <form [formGroup]="communityForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label>Community Name:</label>
+                        <input type="text" placeholder="Community" formControlName="name">
+                        <p *ngIf="communityForm.get('name').invalid && communityForm.get('name').touched" class="help is-danger">The community name is required</p>
+                    </div>
+                    <div class="col-md-12">
+                        
+                        <p class="text-left">
+                            <b>Community Location</b>
+                            <br><em>Choose the community location on the map</em></p>
+                        
+                        <div *ngIf="lat != 200 && lon != 200">
+                            <app-map [markerDraggable]="true" [lat]="lat" [lon]="lon" [markerActive]="true" [zoom]="15" [height]="400" [layers]="layers"
+                              (markerMovedEvent)="markerMoved($event)"></app-map>
+                          </div>
+                    </div>
+                    
+                    <div class="col-md-12">
+                        <button class="btn btn--primary type--uppercase" type="submit" [disabled]="communityForm.invalid">Send</button>
+                    </div>
+                    
+                </div>
+                <!--end of row-->
+            </form>
+        </div>
+    </div>
+</div>

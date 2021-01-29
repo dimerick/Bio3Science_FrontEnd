@@ -1,0 +1,44 @@
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="text-block">
+                    <h3>University</h3>
+                    <p>
+                        
+                    </p>
+                </div>
+                <form [formGroup]="universityForm" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label>University Name:</label>
+                            <input type="text" placeholder="University" formControlName="name">
+                            <p *ngIf="universityForm.get('name').invalid && universityForm.get('name').touched" class="color--error text-left">The university name is required</p>
+                        </div>
+                        <div class="col-md-12">
+                            
+                            <p class="text-left">
+                                <b>University Location</b>
+                                <br><em>Choose the university location on the map</em></p>
+                            
+                            <div *ngIf="lat != 200 && lon != 200">
+                                <app-map [markerDraggable]="true" [lat]="lat" [lon]="lon" [markerActive]="true" [zoom]="15" [height]="400" [layers]="layers"
+                                  (markerMovedEvent)="markerMoved($event)"></app-map>
+                              </div>
+                        </div>
+                        
+                        <div class="col-md-12">
+                            <button class="btn btn--primary type--uppercase" type="submit" [disabled]="universityForm.invalid">Send</button>
+                        </div>
+                        
+                    </div>
+                    <!--end of row-->
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+                    
+           

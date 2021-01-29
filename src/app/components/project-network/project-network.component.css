@@ -1,0 +1,4 @@
+#canvas-project-network g .line-network{
+    cursor: pointer!important;
+    pointer-events: initial;
+  }

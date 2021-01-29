@@ -1,0 +1,24 @@
+<div id="user-panel" [ngClass]="{'active':panelActive}">
+    <div class="current-user">
+        <a href="#" (click)="closePanel()">
+            <span class="icon">
+                <fa-icon [icon]="faAngleRight" class="fa-2x"></fa-icon>
+            </span>
+            </a>
+        <figure class="media-left media-rights">
+            <p class="image is-64x64">
+              <img class="is-rounded" src="https://bulma.io/images/placeholders/128x128.png">
+            </p>
+          </figure>
+          <span class="name-user"> {{currentUser.name}} <br>
+            <a href="#" (click)="logout()"> Cerrar Sesion </a>
+          </span>
+          
+    </div>
+    
+      <div class="content">
+        <h1>User Panel</h1>
+      </div>
+    
+    
+</div>

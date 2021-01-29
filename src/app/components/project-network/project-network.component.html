@@ -1,0 +1,35 @@
+<section class="text-center ">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-lg-8">
+                <h1>Bio3science Network</h1>
+                <p class="lead">
+                    En este mapa podras visualizar la red de proyectos Bio3science
+                </p>
+
+                <div *ngIf="lat != 200 && lon != 200">
+                    <app-map
+                    [lat]="lat" 
+                    [lon]="lon" 
+                    [markerActive]="false"
+                    [searchControlActive]="true"  
+                    [zoom]="initZoom" 
+                    [height]="400" 
+                    [layers]="layers" 
+                    (markerMovedEvent)="markerMoved($event)" 
+                    (mapReadyEvent)="mapReady($event)" 
+                    (mapZoomEndEvent)="mapZoomEnd($event)"
+                    (onMapMoveEndEvent)="mapMoveEnd($event)" 
+                    (onMapSizeEvent)="mapSizeChange($event)" 
+                    (searchActiveEvent)="searchActive($event)"
+                    ></app-map>
+                </div>
+            </div>
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
+</section>
+
+
+<!-- <p>Project Network</p> -->

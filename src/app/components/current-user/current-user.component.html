@@ -1,0 +1,60 @@
+<div *ngIf="!logged && !loadingDataUser">
+
+    <div class="bar__module">
+        <a class="btn btn--sm type--uppercase" [routerLink]="['/login']">
+            <span class="btn__text">
+                Login
+            </span>
+        </a>
+        <a class="btn btn--sm btn--primary type--uppercase" [routerLink]="['/signup']">
+            <span class="btn__text">
+                Sign Up
+            </span>
+        </a>
+    </div>
+    <!--end module-->
+
+</div>
+
+<div *ngIf="logged" class="logged">
+
+    <div class="bar__module">
+        <ul class="menu-horizontal">
+            <li class="dropdown dropdown--hover">
+                <span class="dropdown__trigger">
+                    <i class="fa fa-user-circle fa-2x" aria-hidden="true" title="Avatar"></i> {{currentUser.name}}
+                    <!-- <img alt="avatar" class="avatar image--xxs" src="assets/img/avatar-round-1.png"> {{currentUser.name}} -->
+                </span>
+                
+
+                <div class="dropdown__container" style="left: -585px;">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-3 col-lg-2 dropdown__content" style="left: 585px;">
+                              
+                                <ul class="menu-vertical text-left">
+                                    <li>
+                                        <a href="javascript: void(0)" [routerLink]="['/project']">Create Project</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript: void(0)" [routerLink]="['/my-publications']">My Publications</a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript: void(0)" (click)="logout()">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--end row-->
+                    </div>
+                    <!--end container-->
+                </div>
+
+
+            </li>
+            
+        </ul>
+    </div>
+
+    
+</div>

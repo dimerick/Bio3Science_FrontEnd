@@ -1,0 +1,125 @@
+<div class="nav-container ">
+    <div class="bar bar--sm visible-xs">
+        <div class="container">
+            <div class="row">
+                <div class="col-3 col-md-2">
+                    <a href="index.html">
+                        <img class="logo logo-dark" alt="logo" src="assets/img/logo-dark.png" />
+                                <img class="logo logo-light" alt="logo" src="assets/img/logo-light.png" />
+                    </a>
+                </div>
+                <div class="col-9 col-md-10 text-right">
+                    <a href="javascript:void(0)" class="hamburger-toggle" (click)="toggleMenuXsActive()">
+                        <i class="icon icon--sm stack-interface stack-menu"></i>
+                    </a>
+                </div>
+            </div>
+            <!--end of row-->
+        </div>
+        <!--end of container-->
+    </div>
+    <!--end bar-->
+    <nav id="menu1" class="bar bar--sm bar-1 hidden-xs bar--absolute bar--transparent" [ngClass]="{'hidden-xs':menuXsActive}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-1 col-md-2 hidden-xs">
+                    <div class="bar__module">
+                        <a href="index.html">
+                            <img class="logo logo-dark" alt="logo" src="assets/img/logo-dark.png" />
+                            <img class="logo logo-light" alt="logo" src="assets/img/logo-light.png" />
+                        </a>
+                    </div>
+                    <!--end module-->
+                </div>
+                <div class="col-lg-11 col-md-12 text-right text-left-xs text-left-sm">
+                    <div class="bar__module">
+                        <ul class="menu-horizontal text-left">
+                                    
+                            <!-- <li>
+                                <a [routerLink]="['/gallery']">
+                                    Home
+                                </a>
+                            </li> -->
+
+                            <li>
+                                <a [routerLink]="['/gallery']">
+                                    Gallery
+                                </a>
+                            </li>
+
+                            <!-- <li>
+                                <a href="#">
+                                    About Us
+                                </a>
+                            </li> -->
+
+                            <li>
+                                <a [routerLink]="['/project-network']">
+                                    Network
+                                </a>
+                            </li>
+                            
+                            
+                            
+                        </ul>
+                    </div>
+                    <!--end module-->
+                    <div class="bar__module">
+                        <app-current-user></app-current-user>
+                    </div>
+                    <!--end module-->
+                </div>
+            </div>
+            <!--end of row-->
+        </div>
+        <!--end of container-->
+    </nav>
+    <!--end bar-->
+</div>
+
+<div class="main-container">
+    <section id="cover-initial" class="cover height-60 imagebg text-center" data-overlay="5">
+        <div class="background-image-holder background--top" style="background: url(&quot;assets/img/background-header.jpg&quot;); opacity: 1;">
+            <img alt="background" src="assets/img/background-header.jpg">
+        </div>
+        <div class="container pos-vertical-center">
+            <div class="row">
+                <div class="col-md-12">
+                    <br>
+                    <br>
+                    <h1>
+                        Bio<sup>3</sup>science | Network of Researchers
+                    </h1>
+                    <!-- <a class="btn btn--primary type--uppercase" href="#">
+                        <span class="btn__text">
+                            Get A Quote — No Obligation
+                        </span>
+                    </a> -->
+                    <br>
+                    <br>
+                </div>
+            </div>
+            <!--end of row-->
+        </div>
+        <!--end of container-->
+    </section>
+    
+    <!--end bar-->
+    
+
+    <div class="notification pos-top pos-right search-box bg--white border--bottom notification--reveal notification--dismissed" data-animation="from-top" data-notification-link="search-box">
+        <form>
+            <div class="row justify-content-center">
+                <div class="col-lg-6 col-md-8">
+                    <input type="search" name="query" placeholder="Type search query and hit enter">
+                </div>
+            </div>
+            <!--end of row-->
+        </form>
+    <div class="notification-close-cross notification-close"></div></div>
+    <!--end of notification-->
+    
+    
+    
+    
+</div>

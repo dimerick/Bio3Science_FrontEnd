@@ -1,0 +1,48 @@
+
+    <div class="box">
+        <h1 class="title is-3">University</h1>
+        <form [formGroup]="universityForm" (ngSubmit)="onSubmit()">
+
+          <div class="field">
+            <label class="label">Nombre</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Ingrese el nombre de su universidad" name="name" formControlName="name">
+            </div>
+            <p *ngIf="universityForm.get('name').invalid && universityForm.get('name').touched" class="help is-danger">Debes
+              ingresar la universidad a la cual estas adscrito</p>
+          </div>
+            
+              <!-- <div class="field">
+                <label class="label">Nombre</label>
+                <div class="control">
+                  <ng-select class="custom" 
+                  [items]="items" 
+                  bindLabel="name"
+                   bindValue="id" 
+                   formControlName="name" 
+                   placeholder="Ingrese el nombre de su universidad" 
+                   (change)="onChange($event)"
+                  ></ng-select>
+                  <p *ngIf="universityForm.get('name').invalid && universityForm.get('name').touched" class="help is-danger">Debes ingresar el nombre de tu universidad</p>
+                </div>
+                
+              </div> -->
+
+              <div class="field">
+                <label class="label">Ubicación Universidad <br> </label>
+                <em>Arrastre el marcador hasta la ubicacion deseada</em>
+                <div class="control">
+                  <div *ngIf="lat != 200 && lon != 200">
+                    <app-map [markerDraggable]="true" [lat]="lat" [lon]="lon" [markerActive]="true" [zoom]="15" [height]="400" [layers]="layers"
+                      (markerMovedEvent)="markerMoved($event)"></app-map>
+                  </div>
+                </div>
+              </div>
+      
+              <div class="control">
+                <input type="submit" value="Enviar" class="button is-link" [disabled]="universityForm.invalid">
+              </div>
+      
+        </form>
+    </div>
+

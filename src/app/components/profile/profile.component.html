@@ -1,0 +1,78 @@
+<section class="bg--secondary space--sm" *ngIf="user">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="boxed boxed--lg boxed--border">
+                    <div class="text-block text-center">
+                        <i class="fa fa-user-circle fa-4x" aria-hidden="true" title="Avatar"></i>
+                        <span class="h5">{{user.name}} {{user.last_name}}</span>
+                        <span>{{user.description}}</span>
+                        <span class="label">Researcher</span>
+                    </div>
+                    <div class="text-block clearfix text-center">
+                        <ul class="row row--list">
+                            <li class="col-md-4">
+                                <span class="type--fine-print block">Location:</span>
+                                <span>{{user.university}}&nbsp;</span>
+                                
+                            </li>
+                            <li class="col-md-4">
+                                <span class="type--fine-print block">Member Since:</span>
+                                <span>{{user.date_joined | date : 'longDate'}}</span>
+                            </li>
+                            <li class="col-md-4">
+                                <span class="type--fine-print block">Contact:</span>
+                                <a href="#">{{user.email}}</a>
+                            </li>
+                    </ul></div>
+                    
+                </div>
+                <div class="boxed boxed--border">
+                    <ul class="row row--list clearfix text-center">
+                        <li class="col-md-4">
+                            <!-- <span class="h6 type--uppercase type--fade">Likes</span>
+                            <span class="h3">220</span> -->
+                        </li>
+                        <li class="col-md-4">
+                            <span class="h6 type--uppercase type--fade">Publications</span>
+                            <span class="h3">{{user.projects.length}}</span>
+                        </li>
+                        <li class="col-md-4">
+                            <!-- <span class="h6 type--uppercase type--fade">Comments</span>
+                            <span class="h3">2,129</span> -->
+                        </li>
+                       
+                    </ul>
+                </div>
+
+                <div class="boxed boxed--border" *ngIf="user.projects.length > 0">
+                    <h4>Recent Activity</h4>
+                    <ul *ngFor="let project of user.projects">
+                        <li class="clearfix">
+                            <div class="row">
+                                <div class="col-lg-2 col-3 text-center">
+                                    <div class="icon-circle">
+                                        <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-8 col-7">
+                                    <span class="type--fine-print">{{project.created_at | date : 'longDate'}}</span>
+                                    <a href="/project/{{project.id}}" class="block color--primary">{{project.name}}</a>
+                                    <p>
+                                        {{project.description}}
+                                    </p>
+                                </div>
+                            </div>
+                            <hr>
+                        </li>
+                        
+                        
+                    </ul>
+                    <!-- <a href="#" class="type--fine-print pull-right">View All</a> -->
+                </div>
+            </div>
+        </div>
+        <!--end of row-->
+    </div>
+    <!--end of container-->
+</section>

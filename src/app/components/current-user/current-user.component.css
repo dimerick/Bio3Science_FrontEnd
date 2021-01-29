@@ -1,0 +1,21 @@
+.current-user{
+    display: flex;
+    align-items: center;
+}
+.current-user .name-user{
+    font-size: 2em;
+    font-weight: 700;
+}
+
+.current-user a{
+    color: black!important;
+}
+.current-user.hidden{
+    visibility: hidden;
+}
+.logged{
+    height: 100%!important;
+}
+.navbar-item{
+    height: 100%!important;
+}

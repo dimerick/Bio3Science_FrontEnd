@@ -1,0 +1,15 @@
+/*! Place your custom styles here */
+
+.bar .logo {
+    max-height: 6em!important;
+}
+.modal-container.modal-active{
+    z-index: 1500!important;
+}
+.swal2-container{
+    z-index: 10000!important;
+}
+
+div.ng-input input{
+    height: 15px!important;
+}
