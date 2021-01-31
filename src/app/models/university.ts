@@ -21,4 +21,5 @@ export interface University{
     }, 
     created_by?: number, 
     created_at: string, 
+    tipo: string
 }

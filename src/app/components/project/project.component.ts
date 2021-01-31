@@ -44,6 +44,7 @@ export class ProjectComponent implements OnInit {
   public projectSelected: Project;
   public universityRegistered: University;
   public communitiesAssociated: Community[] = [];
+  public researchersAssociated: University[] = [];
   public modalAddCommunityActive = false;
   public communityRegistered: Community;
   public mainUniversityDisabled = false;
@@ -69,13 +70,11 @@ export class ProjectComponent implements OnInit {
       university: [null, [Validators.required]],
       universitiesAssociated: [null],
       communitiesAssociated: [null],
+      researchersAssociated: [null],
     }, {
-      validators: this.validatorsService.entitiesAssociated('project', 'universitiesAssociated', 'communitiesAssociated')
+      validators: this.validatorsService.entitiesAssociated('project', 'universitiesAssociated', 'communitiesAssociated', 'researchersAssociated')
     });
-    this.getProjects();
-    this.getUniversities();
-    this.getCommunities();
-    this.getCurrentUser();
+
     this.lat = 200;
     this.lon = 200;
     this.layers = [];
@@ -83,6 +82,7 @@ export class ProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getCurrentUser();
 
     this.getLocation();
     this.createListeners();
@@ -109,7 +109,7 @@ export class ProjectComponent implements OnInit {
   }
 
   getProjects() {
-    this.projectService.getProjectsExpanded().subscribe(
+    this.projectService.getProjectsExpandedByUser(this.currentUser.id).subscribe(
       resp => {
         this.projects = resp;
         console.log(this.projects);
@@ -122,22 +122,22 @@ export class ProjectComponent implements OnInit {
 
   onSubmit() {
 
-    if(this.projectForm.invalid){
+    if (this.projectForm.invalid) {
 
-      
 
-      return Object.values( this.projectForm.controls ).forEach( control => {
-        
-        if ( control instanceof FormGroup ) {
-          Object.values( control.controls ).forEach( control => control.markAsTouched() );
+
+      return Object.values(this.projectForm.controls).forEach(control => {
+
+        if (control instanceof FormGroup) {
+          Object.values(control.controls).forEach(control => control.markAsTouched());
         } else {
           control.markAsTouched();
         }
-        
-        
-        
+
+
+
       });
-      
+
 
     }
 
@@ -179,19 +179,19 @@ export class ProjectComponent implements OnInit {
             communities: communitiesAssociated
           };
 
-          if(universitiesAssociated != null && communitiesAssociated == null){
+          if (universitiesAssociated != null && communitiesAssociated == null) {
             entities = {
               universities: universitiesAssociated
             };
           }
 
-          if(communitiesAssociated != null && universitiesAssociated == null){
+          if (communitiesAssociated != null && universitiesAssociated == null) {
             entities = {
               communities: communitiesAssociated
             };
-          }    
+          }
 
-          
+
 
           console.log(entities);
           Swal.fire({
@@ -256,7 +256,7 @@ export class ProjectComponent implements OnInit {
 
             });
 
-        }else{
+        } else {
 
           if (this.loadFilesComponent.files.length > 0) {
             Swal.fire({
@@ -284,7 +284,7 @@ export class ProjectComponent implements OnInit {
                   text: err
                 });
               });
-          }else{
+          } else {
             Swal.fire({
               icon: 'success',
               title: 'Project registration was successful'
@@ -372,8 +372,8 @@ export class ProjectComponent implements OnInit {
     this.lon = e.lng;
   }
 
-  getUniversities() {
-    this.universityService.getUniversities().subscribe(
+  getUniversitiesAndMylocation() {
+    this.universityService.getUniversitiesAndMylocation(-1, 'university', this.currentUser.id).subscribe(
       resp => {
         this.universities = resp;
 
@@ -384,10 +384,36 @@ export class ProjectComponent implements OnInit {
     );
   }
 
+
+  getUniversities() {
+    this.universityService.getUniversities(-1, 'university').subscribe(
+      resp => {
+        this.universitiesAssociated = resp;
+
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  
+
   getCommunities() {
     this.communityService.getCommunities().subscribe(
       resp => {
         this.communitiesAssociated = resp;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+
+  getResearchers() {
+    this.universityService.getUniversities(-1, 'researcher').subscribe(
+      resp => {
+        this.researchersAssociated = resp;
       },
       (err) => {
         console.log(err);
@@ -490,20 +516,20 @@ export class ProjectComponent implements OnInit {
   }
 
   toggleAddUniversity() {
-    
+
     document.body.classList.toggle("modal-open");
     this.modalAddUniversityActive = !this.modalAddUniversityActive;
   }
 
   toggleAddCommunity() {
-    
+
     document.body.classList.toggle("modal-open");
     this.modalAddCommunityActive = !this.modalAddCommunityActive;
   }
 
 
   eventUniversityRegistered(e: University) {
-    
+
     console.log(e);
     this.universityRegistered = e;
     this.getUniversities();
@@ -577,6 +603,11 @@ export class ProjectComponent implements OnInit {
     this.userService.currentUser().subscribe(resp => {
       console.log(resp);
       this.currentUser = resp;
+      this.getProjects();
+      this.getUniversitiesAndMylocation();
+      this.getUniversities();
+      this.getCommunities();
+      this.getResearchers();
     },
       err => {
         console.log(err);

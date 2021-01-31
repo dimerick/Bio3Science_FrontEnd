@@ -124,75 +124,155 @@ export class SignupComponent implements OnInit {
     this._authService.singUp(user)
       .subscribe(
         resp => {
-          console.log(resp);
 
           let idRegistrado = resp.id;
 
-          let profile: Profile = {
-
-            user: idRegistrado,
-            degree: this.signUpForm.value.degree,
-            field_of_study: this.signUpForm.value.field_of_study,
-            description: this.signUpForm.value.description
-
-          };
-
-          if (this.signUpForm.value.websites) {
-            profile.websites = this.signUpForm.value.websites
-          }
-
           if (this.signUpForm.value.independentInvestigator) {
-            profile.ind_researcher = true,
-              profile.location = {
-                coordinates: [this.lon2, this.lat2],
+            let university: University = {
+              id: null,
+              name: this.signUpForm.value.name + ' ' + this.signUpForm.value.last_name,
+              location: {
+                coordinates: [this.mark2.getLatLng().lng, this.mark2.getLatLng().lat],
                 type: "Point"
-              }
 
-          }
+              },
+              created_by: idRegistrado,
+              created_at: null,
+              tipo: 'researcher'
+            };
+
+            Swal.fire({
+              allowOutsideClick: false,
+              icon: 'info',
+              text: 'Loading location...',
+
+            });
+            Swal.showLoading();
+            this.universityService.createUniversity(university)
+              .subscribe(
+                resp => {
+                  this.universityRegistered = resp;
 
 
-          this._userService.createProfile(profile)
-            .subscribe(
-              resp => {
-                console.log(resp);
-                if (this.universityRegistered && !this.signUpForm.value.independentInvestigator) {
-                  this.universityRegistered.created_by = idRegistrado;
-                  this.universityService
-                    .updateOwnerUniversity(this.universityRegistered, idRegistrado)
-                    .subscribe(resp => {
-                      this.signUpForm.reset();
-                      // this.modalActive = false;
-                      Swal.fire({
-                        icon: 'success',
-                        title: 'Your registration was successful'
+                  let profile: Profile = {
 
-                      });
-                    },
-                      (err) => {
+                    user: idRegistrado,
+                    degree: this.signUpForm.value.degree,
+                    field_of_study: this.signUpForm.value.field_of_study,
+                    description: this.signUpForm.value.description,
+                    university: this.universityRegistered.id,
+                    ind_researcher: true
 
-                      });
-                }
-                else {
-                  this.signUpForm.reset();
-                  // this.modalActive = false;
+                  };
+
+                  if (this.signUpForm.value.websites) {
+                    profile.websites = this.signUpForm.value.websites
+                  }
+
+
                   Swal.fire({
-                    icon: 'success',
-                    title: 'Your registration was successful'
+                    allowOutsideClick: false,
+                    icon: 'info',
+                    text: 'Loading profile...',
 
+                  });
+                  Swal.showLoading();
+
+                  this._userService.createProfile(profile)
+                    .subscribe(
+                      resp => {
+
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'Your registration was successful'
+
+                        });
+
+                      },
+                      (err) => {
+                        Swal.fire({
+                          icon: 'error',
+                          title: 'Error loading profile'
+                        });
+                      }
+
+                    );
+
+                },
+                (err) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error loading location'
+                  });
+                }
+              );
+
+          }else {
+
+
+            let profile: Profile = {
+
+              user: idRegistrado,
+              degree: this.signUpForm.value.degree,
+              field_of_study: this.signUpForm.value.field_of_study,
+              description: this.signUpForm.value.description,
+              university: this.signUpForm.value.university,
+              ind_researcher: false
+
+            };
+
+            if (this.signUpForm.value.websites) {
+              profile.websites = this.signUpForm.value.websites
+            }
+
+
+            Swal.fire({
+              allowOutsideClick: false,
+              icon: 'info',
+              text: 'Loading profile...',
+
+            });
+            Swal.showLoading();
+
+            this._userService.createProfile(profile)
+              .subscribe(
+                resp => {
+
+                  if (this.universityRegistered) {
+                    this.universityRegistered.created_by = idRegistrado;
+
+                    this.universityService
+                      .updateOwnerUniversity(this.universityRegistered, idRegistrado)
+                      .subscribe(resp => {
+                        this.signUpForm.reset();
+                        // this.modalActive = false;
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'Your registration was successful'
+
+                        });
+                      },
+                        (err) => {
+
+                        });
+
+                  }
+
+                },
+                (err) => {
+                  Swal.fire({
+                    icon: 'error',
+                    title: 'Error loading profile'
                   });
                 }
 
+              );
 
-              },
-              (err) => {
-                console.log(err);
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error creating profile',
-                  text: err
-                });
-              }
-            );
+
+
+          }
+
+
 
 
         },

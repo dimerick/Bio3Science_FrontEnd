@@ -36,7 +36,7 @@ export class ValidatorsService {
     });
   }
 
-  
+
   passwordMatch(passwordName: string, confirmPasswordName: string) {
 
     return (formGroup: FormGroup) => {
@@ -52,40 +52,52 @@ export class ValidatorsService {
     }
   }
 
-  entitiesAssociated(projectName: string, universitiesAssociatedName: string, 
-    communitiesAssociated: string) {
+  entitiesAssociated(projectName: string, universitiesAssociatedName: string,
+    communitiesAssociated: string,
+    researchersAssociated: string) {
 
     return (formGroup: FormGroup) => {
       const projectControl = formGroup.controls[projectName];
       const universitiesAssociatedControl = formGroup.controls[universitiesAssociatedName];
       const communitiesAssociatedControl = formGroup.controls[communitiesAssociated];
+      const researchersAssociatedControl = formGroup.controls[researchersAssociated];
 
       if (projectControl.value > 0) {
         let universityHasError = false;
         let communityHasError = false;
-        if(universitiesAssociatedControl.value == null){
+        let researcherHasError = false;
+
+        if (universitiesAssociatedControl.value == null) {
           universityHasError = true;
-        }else if(universitiesAssociatedControl.value.length == 0 ){
+        } else if (universitiesAssociatedControl.value.length == 0) {
           universityHasError = true;
         }
 
-        if(communitiesAssociatedControl.value == null){
+        if (communitiesAssociatedControl.value == null) {
           communityHasError = true;
-        }else if(communitiesAssociatedControl.value.length == 0 ){
-          communityHasError = true;          
+        } else if (communitiesAssociatedControl.value.length == 0) {
+          communityHasError = true;
         }
 
-        if(universityHasError && communityHasError){
+        if (researchersAssociatedControl.value == null) {
+          researcherHasError = true;
+        } else if (researchersAssociatedControl.value.length == 0) {
+          researcherHasError = true;
+        }
+
+        if (universityHasError && communityHasError && researcherHasError) {
           universitiesAssociatedControl.setErrors({ noEntityAssociated: true });
           communitiesAssociatedControl.setErrors({ noEntityAssociated: true });
-        }else{
+          researchersAssociatedControl.setErrors({ noEntityAssociated: true });
+        } else {
           universitiesAssociatedControl.setErrors(null);
-        communitiesAssociatedControl.setErrors(null);
+          communitiesAssociatedControl.setErrors(null);
+          researchersAssociatedControl.setErrors(null);
         }
-        
 
-        
-        
+
+
+
       } else {
         universitiesAssociatedControl.setErrors(null);
         communitiesAssociatedControl.setErrors(null);
@@ -95,25 +107,25 @@ export class ValidatorsService {
   }
 
   typeInvestigator(independentInvestigator: string, university: string) {
-      return (formGroup: FormGroup) => {
-        const independentInvestigatorControl = formGroup.controls[independentInvestigator];
-        const universityControl = formGroup.controls[university];
+    return (formGroup: FormGroup) => {
+      const independentInvestigatorControl = formGroup.controls[independentInvestigator];
+      const universityControl = formGroup.controls[university];
 
-        if(!independentInvestigatorControl.value && universityControl.value == null){
-          universityControl.setErrors({ noUniversitySelected: true });
-        }else {
-          universityControl.setErrors(null);
-        }
-
-        // if(independentInvestigatorControl.value && !mark2Moved){
-        //   independentInvestigatorControl.setErrors({ noLocationEstablished: true });
-        // }
-        // else{
-        //   independentInvestigatorControl.setErrors(null);
-        // }
+      if (!independentInvestigatorControl.value && universityControl.value == null) {
+        universityControl.setErrors({ noUniversitySelected: true });
+      } else {
+        universityControl.setErrors(null);
       }
-      
+
+      // if(independentInvestigatorControl.value && !mark2Moved){
+      //   independentInvestigatorControl.setErrors({ noLocationEstablished: true });
+      // }
+      // else{
+      //   independentInvestigatorControl.setErrors(null);
+      // }
     }
+
+  }
 
 
 }

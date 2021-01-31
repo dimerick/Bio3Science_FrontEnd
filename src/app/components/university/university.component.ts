@@ -80,6 +80,7 @@ export class UniversityComponent implements OnInit {
       }, 
       created_by: currentUserId, 
       created_at: null, 
+      tipo: 'university'
     };
     if(university.created_by == null){
       university = {
@@ -90,6 +91,7 @@ export class UniversityComponent implements OnInit {
   
         },  
         created_at: null, 
+        tipo: 'university'
       };
     }
     Swal.fire({

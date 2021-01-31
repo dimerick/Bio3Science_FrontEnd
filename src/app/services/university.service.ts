@@ -50,9 +50,24 @@ export class UniversityService{
 
     }
 
-    getUniversities():Observable<University[]>{
+    getUniversities(excludeId: number, tipo: string):Observable<University[]>{
         return this._http.get(
-            `${this.url}university`
+            `${this.url}university?exclude_id=${excludeId}&tipo=${tipo}`
+        ).pipe(
+            map( (resp:University[]) => {
+                console.log(resp);
+                return resp;
+            }
+            )
+            
+        );
+    }
+
+    
+
+    getUniversitiesAndMylocation(excludeId: number, tipo: string, idUser: number):Observable<University[]>{
+        return this._http.get(
+            `${this.url}university?user=${idUser}&exclude_id=${excludeId}&tipo=${tipo}`
         ).pipe(
             map( (resp:University[]) => {
                 console.log(resp);

@@ -92,6 +92,18 @@ export class ProjectService{
         );
     }
 
+    getProjectsExpandedByUser(idUser: number):Observable<Project[]>{
+        return this._http.get(
+            `${this.url}project-expanded?user=${idUser}`
+        ).pipe(
+            map( (resp:Project[]) => {
+                return resp;
+            }
+            )
+            
+        );
+    }
+
     getProjectsExpandedById(idProject: number):Observable<Project>{
         return this._http.get(
             `${this.url}project-expanded/${idProject}`
