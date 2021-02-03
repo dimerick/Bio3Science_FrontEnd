@@ -127,6 +127,15 @@
                                 (change)="onChangeCommunitiesAssociated($event)" [multiple]="true"></ng-select>
     
                         </div>
+
+                        <div class="col-12">
+                            <label>Select Associated Researchers</label>
+                            <ng-select class="custom" [items]="researchersAssociated" bindLabel="name" bindValue="id"
+                                formControlName="researchersAssociated"
+                                placeholder="Associated Researchers"
+                                (change)="onChangeResearchersAssociated($event)" [multiple]="true"></ng-select>
+    
+                        </div>
     
                         <div *ngIf="loadImagesActive" class="col-12">
                             <app-load-files></app-load-files>

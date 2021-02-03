@@ -171,28 +171,58 @@ export class ProjectComponent implements OnInit {
 
         let universitiesAssociated = this.projectForm.value.universitiesAssociated;
         let communitiesAssociated = this.projectForm.value.communitiesAssociated;
+        let researchersAssociated = this.projectForm.value.researchersAssociated;
 
-        if (universitiesAssociated != null || communitiesAssociated != null) {
+        if (universitiesAssociated != null || communitiesAssociated != null || researchersAssociated != null) {
 
           let entities: EntitiesProject = {
-            universities: universitiesAssociated,
-            communities: communitiesAssociated
+            universities: universitiesAssociated, 
+            communities: communitiesAssociated, 
+            researchers: researchersAssociated
+
           };
 
-          if (universitiesAssociated != null && communitiesAssociated == null) {
-            entities = {
-              universities: universitiesAssociated
-            };
+          if(universitiesAssociated == null && communitiesAssociated == null && researchersAssociated != null){
+            let entities = {
+              researchers: researchersAssociated
+            }
           }
 
-          if (communitiesAssociated != null && universitiesAssociated == null) {
-            entities = {
-              communities: communitiesAssociated
-            };
+          if(universitiesAssociated == null && communitiesAssociated != null && researchersAssociated == null){
+            let entities = {
+              communities: communitiesAssociated,
+            }
+          }
+
+          if(universitiesAssociated == null && communitiesAssociated != null && researchersAssociated != null){
+            let entities = {
+              communities: communitiesAssociated,
+              researchers: researchersAssociated
+            }
           }
 
 
+          if(universitiesAssociated != null && communitiesAssociated == null && researchersAssociated == null){
+            let entities = {
+              universities: universitiesAssociated, 
+            }
+          }
+          
+          if(universitiesAssociated != null && communitiesAssociated == null && researchersAssociated != null){
+            let entities = {
+              universities: universitiesAssociated, 
+              researchers: researchersAssociated
+            }
+          }
 
+          if(universitiesAssociated != null && communitiesAssociated != null && researchersAssociated == null){
+            let entities = {
+              universities: universitiesAssociated, 
+              communities: communitiesAssociated,
+            }
+          }
+
+          
           console.log(entities);
           Swal.fire({
             allowOutsideClick: false,
@@ -386,7 +416,7 @@ export class ProjectComponent implements OnInit {
 
 
   getUniversities() {
-    this.universityService.getUniversities(-1, 'university').subscribe(
+    this.universityService.getUniversities(this.projectForm.value.university, 'university').subscribe(
       resp => {
         this.universitiesAssociated = resp;
 
@@ -428,7 +458,7 @@ export class ProjectComponent implements OnInit {
       this.lat = e.location.coordinates[1];
       this.lon = e.location.coordinates[0];
       console.log(this.lat, this.lon);
-      this.mapComponent.updateMark(new LatLng(this.lat, this.lon));
+      
 
       let mainId = this.projectForm.value.university;
 
@@ -439,8 +469,8 @@ export class ProjectComponent implements OnInit {
       this.mainUniversitySelected = false;
     }
 
-
   }
+
   onChangeUniversitiesAssociated(e: any) {
     console.log(e);
     if (e != null) {
@@ -463,6 +493,10 @@ export class ProjectComponent implements OnInit {
     }
   }
 
+  onChangeResearchersAssociated(e: any) {
+    console.log(e);
+  }
+
 
   onChangeProject(e: any) {
     this.inputProjectSearch = "";
@@ -476,9 +510,13 @@ export class ProjectComponent implements OnInit {
       console.log("El proyecto existe");
       this.loadImagesActive = false;
       this.projectForm.controls.description.setValue(this.projectSelected.description);
-      this.projectForm.controls.description.disable();
+      // this.projectForm.controls.description.disable();
       this.projectForm.controls.university.setValue(this.projectSelected.main_university);
-      this.mainUniversityDisabled = true;
+
+      this.projectForm.controls.universitiesAssociated.setValue(this.projectSelected.universities);
+      this.projectForm.controls.communitiesAssociated.setValue(this.projectSelected.communities);
+      this.projectForm.controls.researchersAssociated.setValue(this.projectSelected.researchers);
+      // this.mainUniversityDisabled = true;
 
 
 
@@ -722,8 +760,9 @@ export class ProjectComponent implements OnInit {
   }
 
   updateUniversitiesAssociated(mainId: number) {
-    this.universityService.getUniversityAssociated(mainId).subscribe(resp => {
+    this.universityService.getUniversities(mainId, 'university').subscribe(resp => {
       this.universitiesAssociated = resp;
+      this.mapComponent.updateMark(new LatLng(this.lat, this.lon));
     },
       (err) => {
         console.log(err);

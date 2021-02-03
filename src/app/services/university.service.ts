@@ -61,9 +61,7 @@ export class UniversityService{
             )
             
         );
-    }
-
-    
+    }  
 
     getUniversitiesAndMylocation(excludeId: number, tipo: string, idUser: number):Observable<University[]>{
         return this._http.get(

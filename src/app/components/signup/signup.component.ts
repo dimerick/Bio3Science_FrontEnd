@@ -461,7 +461,7 @@ export class SignupComponent implements OnInit {
   }
 
   getUniversities() {
-    this.universityService.getUniversities().subscribe(
+    this.universityService.getUniversities(-1, 'university').subscribe(
       resp => {
         this.universities = resp;
       },

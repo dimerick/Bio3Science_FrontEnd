@@ -14,6 +14,7 @@ export interface Project{
     users?:User[], 
     universities?:University[], 
     communities?:Community[], 
+    researchers?:University[], 
     images?:Image[], 
     name_uni: string, 
     universities_network?:any[], 
@@ -30,5 +31,6 @@ export interface Project{
 export interface EntitiesProject{ 
     users?:User[], 
     universities?:University[], 
-    communities?:Community[]  
+    communities?:Community[], 
+    researchers?:University[]  
 }

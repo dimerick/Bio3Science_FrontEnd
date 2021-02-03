@@ -159,7 +159,7 @@ export class UniversityComponent implements OnInit {
   }
 
   getUniversities() {
-    this.universityService.getUniversities().subscribe(
+    this.universityService.getUniversities(-1, this.universityForm.value.university).subscribe(
       resp => {
         this.items = resp;
       },
