@@ -53,6 +53,7 @@ export class ProjectComponent implements OnInit {
   public loadImagesActive = true;
   public mainUniversitySelected = false;
   public inputProjectSearch = "";
+  public isNewProject = true;
 
 
 
@@ -71,9 +72,11 @@ export class ProjectComponent implements OnInit {
       universitiesAssociated: [null],
       communitiesAssociated: [null],
       researchersAssociated: [null],
-    }, {
-      validators: this.validatorsService.entitiesAssociated('project', 'universitiesAssociated', 'communitiesAssociated', 'researchersAssociated')
-    });
+    }
+    // , {
+    //   validators: this.validatorsService.entitiesAssociated('project', 'universitiesAssociated', 'communitiesAssociated', 'researchersAssociated')
+    // }
+    );
 
     this.lat = 200;
     this.lon = 200;
@@ -140,19 +143,7 @@ export class ProjectComponent implements OnInit {
 
 
     }
-
-    let project: Project = {
-      id: null,
-      name: this.projectSelected.name,
-      description: this.projectForm.value.description,
-      created_by: this.currentUser.id,
-      created_at: null,
-      main_university: this.projectForm.value.university,
-      name_uni: null
-
-    };
-
-
+    
 
     Swal.fire({
       allowOutsideClick: false,
@@ -164,6 +155,16 @@ export class ProjectComponent implements OnInit {
     /*Se ejecuta si es un nuevo proyecto */
     if (this.projectForm.value.project < 0) {
 
+      let project: Project = {
+        id: null,
+        name: this.projectSelected.name,
+        description: this.projectForm.value.description,
+        created_by: this.currentUser.id,
+        created_at: null,
+        main_university: this.projectForm.value.university,
+        name_uni: null
+  
+      };
 
       this.createProject(project).subscribe(resp => {
         console.log(resp);
@@ -342,23 +343,31 @@ export class ProjectComponent implements OnInit {
     }
     /**Añadir entidades al proyecto Seleccionado */
     else {
-      let universitiesAssociated = this.projectSelected.universities.concat(this.projectForm.value.universitiesAssociated);
-      console.log("universitiesAssociated", universitiesAssociated);
-      let universitiesAssociatedSet = new Set(universitiesAssociated);
-      universitiesAssociated = [...universitiesAssociatedSet];
-      console.log("universitiesAssociated", universitiesAssociated);
+      let project: Project = {
+        name: this.projectSelected.name,
+        description: this.projectForm.value.description,
+        created_by: this.currentUser.id,
+        created_at: null,
+        main_university: this.projectForm.value.university,
+        name_uni: null, 
+        universities: this.projectForm.value.universitiesAssociated,
+        communities: this.projectForm.value.communitiesAssociated, 
+        researchers: this.projectForm.value.researchersAssociated
+  
+      };
+      
 
-      let communitiesAssociated = this.projectSelected.communities.concat(this.projectForm.value.communitiesAssociated);
-      console.log("communitiesAssociated", communitiesAssociated);
-      let communitiesAssociatedSet = new Set(communitiesAssociated);
-      communitiesAssociated = [...communitiesAssociatedSet];
-      console.log("communitiesAssociated", communitiesAssociated);
+      let universitiesAssociated = this.projectForm.value.universitiesAssociated;
 
+      let communitiesAssociated = this.projectForm.value.communitiesAssociated;
+            
+      let researchersAssociated = this.projectForm.value.researchersAssociated;
 
 
       let entities: EntitiesProject = {
         universities: universitiesAssociated.filter(x => x !== null),
-        communities: communitiesAssociated.filter(x => x !== null)
+        communities: communitiesAssociated.filter(x => x !== null), 
+        researchers: researchersAssociated.filter(x => x !== null)
       };
 
       console.log(entities);
@@ -367,16 +376,16 @@ export class ProjectComponent implements OnInit {
       Swal.fire({
         allowOutsideClick: false,
         icon: 'info',
-        text: 'Loading associated entities...',
+        text: 'Updating project...',
 
       });
       Swal.showLoading();
 
-      this.addEntitiesProject(this.projectSelected, entities).subscribe(resp => {
+      this.updateProject(this.projectForm.value.project, project).subscribe(resp => {
 
         Swal.fire({
           icon: 'success',
-          title: 'Associated entities registration was successful'
+          title: 'Updating project was successful'
 
         });
 
@@ -386,7 +395,7 @@ export class ProjectComponent implements OnInit {
         (err) => {
           Swal.fire({
             icon: 'error',
-            title: 'Error loading associated entities',
+            title: 'Error updating project',
             text: err
           });
 
@@ -507,6 +516,7 @@ export class ProjectComponent implements OnInit {
 
 
     if (this.projectForm.value.project > 0) {
+      this.isNewProject = false;
       console.log("El proyecto existe");
       this.loadImagesActive = false;
       this.projectForm.controls.description.setValue(this.projectSelected.description);
@@ -704,6 +714,21 @@ export class ProjectComponent implements OnInit {
   addEntitiesProject = (project: Project, entities: EntitiesProject): Observable<Project> => new Observable(subscriber => {
 
     this.projectService.addEntitiesProject(project.id, entities)
+      .subscribe(
+        (resp: Project) => {
+          subscriber.next(resp);
+          subscriber.complete();
+        },
+        (err) => {
+          subscriber.error(err);
+        }
+      );
+
+  });
+
+  updateProject = (idProject: number, project: Project): Observable<Project> => new Observable(subscriber => {
+
+    this.projectService.updateProject(idProject, project)
       .subscribe(
         (resp: Project) => {
           subscriber.next(resp);

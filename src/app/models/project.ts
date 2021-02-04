@@ -5,7 +5,7 @@ import { Image } from './image';
 
 
 export interface Project{
-    id: number, 
+    id?: number, 
     name: string, 
     description: string, 
     created_by: number, 

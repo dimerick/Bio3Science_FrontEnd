@@ -54,6 +54,20 @@ export class ProjectService{
 
     }
 
+    updateProject(id: number, project:Project):Observable<Project>{
+        
+        return this._http.patch(
+            `${this.url}project/${id}`, 
+            project
+        ).pipe(
+            map( (resp: Project) => {
+                return resp;
+            },
+            )
+        );
+
+    }
+
     createProjectXUser(projectXUser:ProjectXUser):Observable<ProjectXUser>{
         
         return this._http.post(

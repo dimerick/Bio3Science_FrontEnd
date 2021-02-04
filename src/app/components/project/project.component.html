@@ -145,8 +145,10 @@
                         <div class="col-12">
                             <p *ngIf="projectForm.get('universitiesAssociated').invalid && projectForm.get('communitiesAssociated').invalid"
                             class="color--error">You must enter a university or community associated</p>
-                            <button type="submit" class="btn btn--primary" >Create
-                                Project</button>
+                            <button type="submit" class="btn btn--primary" >
+                               <span *ngIf="isNewProject">Create Project</span> 
+                               <span *ngIf="!isNewProject">Update Project</span> 
+                            </button>
                                 <!-- [disabled]="projectForm.invalid" -->
                         </div>
     
