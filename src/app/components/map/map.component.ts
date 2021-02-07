@@ -1,6 +1,7 @@
 /// <reference types='@runette/leaflet-fullscreen' />
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { Map, Control, DomUtil, ZoomAnimEvent, Layer, MapOptions, tileLayer, latLng, geoJSON, divIcon, Marker, Circle, circle, marker, layerGroup, Icon, LatLng, DragEndEvent, FullscreenOptions, DomEvent, TileEventHandlerFn, Bounds, LatLngBounds, LeafletMouseEvent } from 'leaflet';
+import { Search } from 'src/app/models/search';
 
 
 
@@ -45,7 +46,7 @@ export class MapComponent implements OnInit, OnDestroy {
   @Output() mapZoomEndEvent: EventEmitter<ZoomAnimEvent> = new EventEmitter;
   @Output() onMapMoveEndEvent: EventEmitter<boolean> = new EventEmitter;
   @Output() onMapSizeEvent: EventEmitter<boolean> = new EventEmitter;
-  @Output() searchActiveEvent: EventEmitter<string> = new EventEmitter;
+  @Output() searchActiveEvent: EventEmitter<Search> = new EventEmitter;
   @Output() markAddedEvent: EventEmitter<Marker> = new EventEmitter;
   @Input() markerDraggable: boolean;
   public fullscreenOptions: FullscreenOptions = {
@@ -70,6 +71,8 @@ export class MapComponent implements OnInit, OnDestroy {
   public boundsMap: LatLngBounds;
   public modalSearchActive = false;
   public inputSearch = '';
+  public startDateSearch = '';
+  public endDateSearch = '';
   @Input() searchControlActive: boolean;
   public Custom = Control.extend({
 
@@ -119,9 +122,6 @@ export class MapComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.initializeMap();
-
-
-
     this.options = {
       layers: [tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         opacity: 0.7,
@@ -143,6 +143,7 @@ export class MapComponent implements OnInit, OnDestroy {
   };
 
   onMapReady(map: Map) {
+    console.log("Map Ready");
     this.map = map;
     this.map$.emit(map);
     this.zoom = map.getZoom();
@@ -363,15 +364,32 @@ export class MapComponent implements OnInit, OnDestroy {
   }
 
   listenInputSearch() {
-    let input = document.getElementById("inputSearch");
+    // let input = document.getElementById("inputSearch");
 
-    input.addEventListener("keyup", (e) => {
+    // input.addEventListener("keyup", (e) => {
       // console.log(e.key);
-      if (e.key == 'Enter') {
-        console.log(this.inputSearch);
-        this.searchActiveEvent.emit(this.inputSearch);
-      }
-    });
+
+      // this.searchActiveEvent.emit(this.inputSearch);
+      // if (e.key == 'Enter') {
+      //   console.log(this.inputSearch);
+        
+      // }
+    // });
+  }
+
+  onSearch(){
+    console.log("inputSearch", this.inputSearch);
+    console.log("startDateSearch", this.startDateSearch);
+    console.log("endDateSearch", this.endDateSearch);
+
+    let search: Search = {
+      inputSearch: this.inputSearch, 
+      startDate: this.startDateSearch, 
+      endDate: this.endDateSearch
+    }
+
+    this.searchActiveEvent.emit(search);
+
   }
 
 }

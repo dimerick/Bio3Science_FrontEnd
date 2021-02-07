@@ -179,9 +179,9 @@ export class ProjectService{
         );
     }
 
-    getProjectNetworkBySearch(inputSearch: string):Observable<any>{
+    getProjectNetworkBySearch(inputSearch: string, startDate: string, endDate: string):Observable<any>{
         return this._http.get(
-            `${this.url}project-network-expanded?search=${inputSearch}`
+            `${this.url}project-network-expanded?search=${inputSearch}&start_date=${startDate}&end_date=${endDate}`
         ).pipe(
             map( resp => {
                 return resp;
@@ -217,9 +217,9 @@ export class ProjectService{
         );
     }
 
-    getNodesBySearch(inputSearch: string):Observable<any>{
+    getNodesBySearch(inputSearch: string, startDate: string, endDate: string):Observable<any>{
         return this._http.get(
-            `${this.url}nodes-network?search=${inputSearch}`
+            `${this.url}nodes-network?search=${inputSearch}&start_date=${startDate}&end_date=${endDate}`
         ).pipe(
             map( (resp) => {
                 return resp;

@@ -40,8 +40,23 @@
         [ngClass]="{'notification--dismissed':false}">
             <form>
                 <div class="row justify-content-center">
-                    <div class="col-lg-6 col-md-8">
+                    <div class="col-4">
+                      <label>Type your search</label>
                         <input id="inputSearch" [(ngModel)]="inputSearch" type="search" name="query" placeholder="Type search query and hit enter" />
+                        
+                    </div>
+                    <div class="col-4">
+                      <label>Start Date</label>
+                      <input type="date" name="date" [(ngModel)]="startDateSearch" class="datepicker" placeholder="Start date" />
+                      
+                    </div>
+                    <div class="col-4">
+                      <label>End Date</label>
+                      <input type="date" name="date" [(ngModel)]="endDateSearch" class="datepicker" placeholder="End date" />
+                      
+                    </div>
+                    <div class="col-12">
+                      <button class="btn btn--primary col-12" (click)="onSearch()">Search</button>
                     </div>
                 </div>
                 <!--end of row-->

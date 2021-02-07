@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { circle, Icon, LatLng, Layer, marker, Marker, point, Point, Polyline, polyline, DivIcon, DomEvent, latLng, svgOverlay, SVGOverlay, LatLngBounds, icon, divIcon, Map, ZoomAnimEvent, canvas, svg, SVG, layerGroup, LayerGroup, DomUtil, map } from 'leaflet';
 import { Enlace } from 'src/app/models/enlace';
 import { LayerMap } from 'src/app/models/LayerMap';
+import { Search } from 'src/app/models/search';
 import { ProjectService } from 'src/app/services/project.service';
 import { UniversityService } from 'src/app/services/university.service';
 import Swal from 'sweetalert2';
@@ -56,13 +57,14 @@ export class ProjectNetworkComponent implements OnInit {
   ) {
     this.lat = 200;
     this.lon = 200;
-    this.getLocation();
+    
     // this.getProjects();
 
 
   }
 
   ngOnInit(): void {
+    this.getLocation();
     // this.layers =
     //   [
     //     circle([6.15, -75.64], { radius: 10000 })
@@ -74,13 +76,26 @@ export class ProjectNetworkComponent implements OnInit {
   getLocation() {
 
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
+      try {
+        console.log("location detected");
+        navigator.geolocation.getCurrentPosition(position => {
 
-        this.lat = position.coords.latitude;
-        this.lon = position.coords.longitude;
+          this.lat = position.coords.latitude;
+          this.lon = position.coords.longitude;
 
 
-      });
+        });
+
+      } catch (err) {
+        console.log(err);
+        
+      }finally{
+        console.log("this.lat", this.lat);
+        console.log("this.lon", this.lon);
+        this.lat = 39.952583;
+        this.lon = -75.165222;
+      }
+
     } else {
       this.lat = 39.952583;
       this.lon = -75.165222;
@@ -96,7 +111,7 @@ export class ProjectNetworkComponent implements OnInit {
 
   mapReady(e: boolean) {
     this.getProjectNetwork();
-    this.getNodes();
+        this.getNodes();
   }
 
   getProjects() {
@@ -136,7 +151,6 @@ export class ProjectNetworkComponent implements OnInit {
               type: arista.type,
               priority: arista.rn,
               nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name
-
             };
 
             this.enlaces.push(enl);
@@ -155,7 +169,7 @@ export class ProjectNetworkComponent implements OnInit {
       });
   }
 
-  getProjectNetworkBySearch(inputSearch: string) {
+  getProjectNetworkBySearch(inputSearch: string, startDate: string, endDate: string) {
     Swal.fire({
       allowOutsideClick: false,
       icon: 'info',
@@ -164,7 +178,7 @@ export class ProjectNetworkComponent implements OnInit {
     });
 
     Swal.showLoading();
-    this.projectService.getProjectNetworkBySearch(inputSearch).subscribe(resp => {
+    this.projectService.getProjectNetworkBySearch(inputSearch, startDate, endDate).subscribe(resp => {
       this.enlaces = [];
       console.log(resp);
       resp.forEach(uni => {
@@ -304,7 +318,7 @@ export class ProjectNetworkComponent implements OnInit {
       });
   }
 
-  getNodesBySearch(inputSearch: string) {
+  getNodesBySearch(inputSearch: string, startDate, endDate) {
     Swal.fire({
       allowOutsideClick: false,
       icon: 'info',
@@ -313,7 +327,7 @@ export class ProjectNetworkComponent implements OnInit {
     });
 
     Swal.showLoading();
-    this.projectService.getNodesBySearch(inputSearch).subscribe(resp => {
+    this.projectService.getNodesBySearch(inputSearch, startDate, endDate).subscribe(resp => {
       this.layers = [];
       resp.universities.forEach(e => {
         console.log(e);
@@ -661,8 +675,11 @@ export class ProjectNetworkComponent implements OnInit {
     });
   }
 
-  searchActive(inputSearch: string) {
-    let inputEncoded = encodeURI(inputSearch);
+  searchActive(search: Search) {
+    let inputEncoded = encodeURI(search.inputSearch);
+    let startDate = search.startDate;
+    let endDate = search.endDate;
+    
     console.log(inputEncoded);
     let element = document.getElementById("canvas-project-network");
     if (element != null) {
@@ -670,8 +687,8 @@ export class ProjectNetworkComponent implements OnInit {
     }
     this.setInitViewMap();
     this.removeMapLayers();
-    this.getProjectNetworkBySearch(inputEncoded);
-    this.getNodesBySearch(inputEncoded);
+    this.getProjectNetworkBySearch(inputEncoded, startDate, endDate);
+    this.getNodesBySearch(inputEncoded, startDate, endDate);
 
   }
 

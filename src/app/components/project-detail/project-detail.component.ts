@@ -59,7 +59,7 @@ export class ProjectDetailComponent implements OnInit {
   ) {
     this.lat = 200;
     this.lon = 200;
-    this.getLocation();
+    
     // this.getProjects();
 
 
@@ -77,13 +77,25 @@ export class ProjectDetailComponent implements OnInit {
   getLocation() {
 
     if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
+      try {
+        console.log("location detected");
+        navigator.geolocation.getCurrentPosition(position => {
 
-        this.lat = position.coords.latitude;
-        this.lon = position.coords.longitude;
+          this.lat = position.coords.latitude;
+          this.lon = position.coords.longitude;
 
 
-      });
+        });
+
+      } catch (err) {
+        console.log(err);
+        
+      }finally{
+        console.log("this.lat", this.lat);
+        console.log("this.lon", this.lon);
+        this.lat = 39.952583;
+        this.lon = -75.165222;
+      }
     } else {
       this.lat = 39.952583;
       this.lon = -75.165222;
