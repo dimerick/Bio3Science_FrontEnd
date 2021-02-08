@@ -38,25 +38,25 @@
 
 <div id="search-box" class="notification pos-top pos-right search-box bg--white border--bottom" data-animation="from-top" [ngClass]="{'notification--reveal':modalSearchActive}" 
         [ngClass]="{'notification--dismissed':false}">
-            <form>
+            <form [formGroup]="searchForm" (ngSubmit)="onSubmitSearch()">
                 <div class="row justify-content-center">
-                    <div class="col-4">
+                    <div class="col-md-4">
                       <label>Type your search</label>
-                        <input id="inputSearch" [(ngModel)]="inputSearch" type="search" name="query" placeholder="Type search query and hit enter" />
+                        <input id="inputSearch" formControlName="inputSearch" type="search" name="query" placeholder="Type search query and hit enter" />
                         
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                       <label>Start Date</label>
-                      <input type="date" name="date" [(ngModel)]="startDateSearch" class="datepicker" placeholder="Start date" />
+                      <input type="date" name="startDateSearch" formControlName="startDateSearch"/>
                       
                     </div>
-                    <div class="col-4">
+                    <div class="col-md-4">
                       <label>End Date</label>
-                      <input type="date" name="date" [(ngModel)]="endDateSearch" class="datepicker" placeholder="End date" />
+                      <input type="date" name="endDateSearchs" formControlName="endDateSearch"/>
                       
                     </div>
-                    <div class="col-12">
-                      <button class="btn btn--primary col-12" (click)="onSearch()">Search</button>
+                    <div class="col-md-12">
+                      <button class="btn btn--primary col-12">Search</button>
                     </div>
                 </div>
                 <!--end of row-->

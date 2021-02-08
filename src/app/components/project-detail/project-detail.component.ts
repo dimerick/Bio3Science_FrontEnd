@@ -174,7 +174,9 @@ this.galleryActive = true;
               endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
               type: arista.type,
               priority: arista.rn,
-              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name
+              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name,
+              createdBy: project.created_by,
+              nameUser: `<i class="fa fa-user" aria-hidden="true" title="User"></i> ` + project.user_name + ' ' + project.user_last_name
 
             };
 

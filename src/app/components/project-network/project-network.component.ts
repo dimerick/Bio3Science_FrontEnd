@@ -57,7 +57,7 @@ export class ProjectNetworkComponent implements OnInit {
   ) {
     this.lat = 200;
     this.lon = 200;
-    
+
     // this.getProjects();
 
 
@@ -88,8 +88,8 @@ export class ProjectNetworkComponent implements OnInit {
 
       } catch (err) {
         console.log(err);
-        
-      }finally{
+
+      } finally {
         console.log("this.lat", this.lat);
         console.log("this.lon", this.lon);
         this.lat = 39.952583;
@@ -111,7 +111,7 @@ export class ProjectNetworkComponent implements OnInit {
 
   mapReady(e: boolean) {
     this.getProjectNetwork();
-        this.getNodes();
+    this.getNodes();
   }
 
   getProjects() {
@@ -150,7 +150,9 @@ export class ProjectNetworkComponent implements OnInit {
               endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
               type: arista.type,
               priority: arista.rn,
-              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name
+              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name,
+              createdBy: project.created_by,
+              nameUser: `<i class="fa fa-user" aria-hidden="true" title="User"></i> ` + project.user_name + ' ' + project.user_last_name
             };
 
             this.enlaces.push(enl);
@@ -180,36 +182,51 @@ export class ProjectNetworkComponent implements OnInit {
     Swal.showLoading();
     this.projectService.getProjectNetworkBySearch(inputSearch, startDate, endDate).subscribe(resp => {
       this.enlaces = [];
-      console.log(resp);
-      resp.forEach(uni => {
-
-        uni.projects.forEach(project => {
-
-          project.aristas.forEach(arista => {
-
-            let enl: Enlace = {
-              id: project.id,
-              name: project.name,
-              description: project.description,
-              createdAt: project.created_at,
-              initPoint: latLng([uni.lat, uni.long]),
-              endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
-              type: arista.type,
-              priority: arista.rn,
-              nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name
-
-            };
-
-            this.enlaces.push(enl);
-
-          });
-
+      console.log(resp.length);
+      if(resp.length == 0){
+        Swal.fire({
+          allowOutsideClick: false,
+          icon: 'info',
+          text: 'There are no results...'
+    
         });
+        
+      }else{
 
-      });
+        resp.forEach(uni => {
 
-      this.drawEnlaces();
-      Swal.close();
+          uni.projects.forEach(project => {
+  
+            project.aristas.forEach(arista => {
+  
+              let enl: Enlace = {
+                id: project.id,
+                name: project.name,
+                description: project.description,
+                createdAt: project.created_at,
+                initPoint: latLng([uni.lat, uni.long]),
+                endPoint: latLng([arista.assoc_lat, arista.assoc_long]),
+                type: arista.type,
+                priority: arista.rn,
+                nameEntities: uni.name + ` <i class="fa fa-arrows-h" aria-hidden="true" title="Avatar"></i> ` + arista.assoc_name,
+                createdBy: project.created_by,
+                nameUser: `<i class="fa fa-user" aria-hidden="true" title="User"></i> ` + project.user_name + ' ' + project.user_last_name
+  
+              };
+  
+              this.enlaces.push(enl);
+  
+            });
+  
+          });
+  
+        });
+  
+        this.drawEnlaces();
+        Swal.close();
+
+      }
+      
     },
       (err) => {
         console.log(err);
@@ -651,11 +668,16 @@ export class ProjectNetworkComponent implements OnInit {
                             <div>
                             
                             <i class="fa fa-map-marker fa-2x" aria-hidden="true" title="Project"></i>
+
                             
                                 <a href="project/${enl.id}"><h5>${enl.name}</h5></a>
-                                ${enl.nameEntities}                                         
+                                <a href="profile/${enl.createdBy}">${enl.nameUser}</a>
                                 <br>
+                                <i class="fa fa-calendar" aria-hidden="true" title="Date"></i> ${enl.createdAt.slice(0,10)}                                       
                                 <br>
+                                ${enl.nameEntities}                                                                
+                                <br>
+                                <hr>
                                 <p class="text-left">
                                 ${enl.description.replace(/\n/g, "<br />")}
                                 </p>
@@ -679,7 +701,7 @@ export class ProjectNetworkComponent implements OnInit {
     let inputEncoded = encodeURI(search.inputSearch);
     let startDate = search.startDate;
     let endDate = search.endDate;
-    
+
     console.log(inputEncoded);
     let element = document.getElementById("canvas-project-network");
     if (element != null) {

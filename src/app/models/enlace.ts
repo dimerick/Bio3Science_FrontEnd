@@ -24,6 +24,6 @@ export interface Enlace{
     type: string,
     priority: number,
     nameEntities: string, 
-    created_by: number,
-    name_user: string
+    createdBy: number,
+    nameUser: string
 }

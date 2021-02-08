@@ -1,5 +1,6 @@
 /// <reference types='@runette/leaflet-fullscreen' />
 import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Map, Control, DomUtil, ZoomAnimEvent, Layer, MapOptions, tileLayer, latLng, geoJSON, divIcon, Marker, Circle, circle, marker, layerGroup, Icon, LatLng, DragEndEvent, FullscreenOptions, DomEvent, TileEventHandlerFn, Bounds, LatLngBounds, LeafletMouseEvent } from 'leaflet';
 import { Search } from 'src/app/models/search';
 
@@ -70,9 +71,13 @@ export class MapComponent implements OnInit, OnDestroy {
   public actLeft: number = 0;
   public boundsMap: LatLngBounds;
   public modalSearchActive = false;
-  public inputSearch = '';
-  public startDateSearch = '';
-  public endDateSearch = '';
+
+  searchForm = new FormGroup({
+    inputSearch : new FormControl('', []), 
+    startDateSearch : new FormControl('', []),
+    endDateSearch : new FormControl('', []),
+  });
+
   @Input() searchControlActive: boolean;
   public Custom = Control.extend({
 
@@ -377,15 +382,17 @@ export class MapComponent implements OnInit, OnDestroy {
     // });
   }
 
-  onSearch(){
-    console.log("inputSearch", this.inputSearch);
-    console.log("startDateSearch", this.startDateSearch);
-    console.log("endDateSearch", this.endDateSearch);
+  onSubmitSearch(){
+    // console.log("inputSearch", this.inputSearch);
+    // console.log("startDateSearch", this.startDateSearch);
+    // console.log("endDateSearch", this.endDateSearch);
+
+    console.log(this.searchForm);
 
     let search: Search = {
-      inputSearch: this.inputSearch, 
-      startDate: this.startDateSearch, 
-      endDate: this.endDateSearch
+      inputSearch: this.searchForm.value.inputSearch, 
+      startDate: this.searchForm.value.startDateSearch, 
+      endDate: this.searchForm.value.endDateSearch
     }
 
     this.searchActiveEvent.emit(search);
