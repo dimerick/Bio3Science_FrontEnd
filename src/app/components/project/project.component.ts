@@ -184,19 +184,19 @@ export class ProjectComponent implements OnInit {
           };
 
           if(universitiesAssociated == null && communitiesAssociated == null && researchersAssociated != null){
-            let entities = {
+            entities = {
               researchers: researchersAssociated
             }
           }
 
           if(universitiesAssociated == null && communitiesAssociated != null && researchersAssociated == null){
-            let entities = {
+            entities = {
               communities: communitiesAssociated,
             }
           }
 
           if(universitiesAssociated == null && communitiesAssociated != null && researchersAssociated != null){
-            let entities = {
+            entities = {
               communities: communitiesAssociated,
               researchers: researchersAssociated
             }
@@ -204,20 +204,20 @@ export class ProjectComponent implements OnInit {
 
 
           if(universitiesAssociated != null && communitiesAssociated == null && researchersAssociated == null){
-            let entities = {
+            entities = {
               universities: universitiesAssociated, 
             }
           }
           
           if(universitiesAssociated != null && communitiesAssociated == null && researchersAssociated != null){
-            let entities = {
+            entities = {
               universities: universitiesAssociated, 
               researchers: researchersAssociated
             }
           }
 
           if(universitiesAssociated != null && communitiesAssociated != null && researchersAssociated == null){
-            let entities = {
+            entities = {
               universities: universitiesAssociated, 
               communities: communitiesAssociated,
             }
