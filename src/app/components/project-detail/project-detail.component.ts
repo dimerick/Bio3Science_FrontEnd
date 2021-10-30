@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { circle, Icon, LatLng, Layer, marker, Marker, point, Point, Polyline, polyline, DivIcon, DomEvent, latLng, svgOverlay, SVGOverlay, LatLngBounds, icon, divIcon, Map, ZoomAnimEvent, canvas, svg, SVG, layerGroup, LayerGroup, DomUtil, map } from 'leaflet';
+import { circle, Icon, LatLng, Layer, marker, Marker, point, Point, Polyline, polyline, DivIcon, DomEvent, latLng, svgOverlay, SVGOverlay, LatLngBounds, icon, divIcon, Map, ZoomAnimEvent, canvas, svg, SVG, layerGroup, LayerGroup, DomUtil, map, Polygon } from 'leaflet';
 import { Enlace } from 'src/app/models/enlace';
 import { LayerMap } from 'src/app/models/LayerMap';
 import { Project } from 'src/app/models/project';
@@ -44,6 +44,7 @@ export class ProjectDetailComponent implements OnInit {
   public colorU = '#03a7e5';
   public colorC = '#63bb8c';
   public galleryActive = false;
+  public initAreaMap: number;
 
   public canvasIconClean = divIcon({
     iconSize: [0, 0],
@@ -204,6 +205,7 @@ this.galleryActive = true;
   getNodes() {
     this.projectService.getNodesById(this.idProject).subscribe(resp => {
       console.log(resp);
+      let coordsPolyNodes = [];
       resp.universities.forEach(e => {
         console.log(e);
 
@@ -224,6 +226,8 @@ this.galleryActive = true;
         let mark = marker([e.lat, e.long], {
           icon: myIcon,
         });//.bindPopup(e.name);
+        
+        coordsPolyNodes.push([e.lat, e.long]);
 
         let layerMap: LayerMap = {
           id: e.id,
@@ -272,6 +276,8 @@ this.galleryActive = true;
 
         this.layers.push(mark);
 
+        coordsPolyNodes.push([e.lat, e.long]);
+
 
         mark.addEventListener('click', (layer) => {
           console.log(e);
@@ -291,6 +297,12 @@ this.galleryActive = true;
         }, e);
 
       });
+      
+      coordsPolyNodes.push(coordsPolyNodes[0]);
+      let polyNodes = new Polygon(coordsPolyNodes);
+      console.log(polyNodes.getBounds().getCenter());
+      this.mapComponent.map.setView(polyNodes.getBounds().getCenter(), 10);
+      
 
     },
       (err) => {
@@ -336,6 +348,7 @@ this.galleryActive = true;
     let g = document.createElementNS(xmlns, "g");
     let mapSize = map.getSize();
 
+    this.initAreaMap = mapSize.x * mapSize.y;
     svg.setAttribute('width', mapSize.x.toString());
     svg.setAttribute('height', mapSize.y.toString());
     svg.setAttribute('id', "canvas-project-network");
@@ -381,7 +394,10 @@ this.galleryActive = true;
 
     map.setZoom(1);
 
-    this.mapComponent.map.panTo(this.enlaces[0].initPoint);
+    if(this.enlaces.length > 0){
+      this.mapComponent.map.panTo(this.enlaces[0].initPoint);
+    }
+    
 
     map.setZoom(10);
 
@@ -430,9 +446,16 @@ this.galleryActive = true;
 
   updateLinesNetwork() {
     let map = this.mapComponent.map;
+    let size = map.getSize();
+    let areaMap = size.x * size.y;
+    let propAreaMap = areaMap / this.initAreaMap;
     let zoom = map.getZoom();
     let delta = this.initZoom - zoom;
-    let propZoom = Math.pow(2, delta) * 0.7;
+    let unit = 0.4 * propAreaMap;
+    /* if (propAreaMap > 1) {
+      unit = unit * (propAreaMap * 0.5);
+    } */
+    let propZoom = Math.pow(2, delta) * (unit / (propAreaMap));
     let lines = document.getElementsByClassName("line-network");
 
     for (let i = 0; i < lines.length; i++) {
@@ -471,9 +494,9 @@ this.galleryActive = true;
       }
       else {
         let sentido = 1;
-        if (enl.type == 'C') {
+        /* if (enl.type == 'C') {
           sentido = -1;
-        }
+        } */
         let dd = Math.sqrt(dx * dx + dy * dy);
         // let ex = cx + dy/dd * k * (i-(n-1)/2);
         // let ey = cy - dx/dd * k * (i-(n-1)/2);

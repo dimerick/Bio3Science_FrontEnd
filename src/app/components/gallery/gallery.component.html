@@ -5,29 +5,27 @@
 
         <div class="row">
 
-            <div class="col-md-10 col-lg-8">
+            <div class="col-md-12 col-lg-12">
                 <h1>Bio3science Gallery</h1>
-                
+                <br>
 
                 <div class="row">
-                    <div class="col-md-6" *ngFor="let project of projects">
-                        <div class="project-thumb hover-element border--round hover--active">
-                            <a href="#" [routerLink]="['/project', project.id]">
-                                <div class="hover-element__initial">
-                                    <div style="background: url(&quot;{{project.images[0].url}}&quot;); opacity: 1;">
-                                        <img alt="background" src="{{project.images[0].url}}">
-                                    </div>
-                                </div>
-                                <div class="hover-element__reveal" data-scrim-top="5">
-                                    <div class="project-thumb__title">
-                                        <h4>{{project.name}}</h4>
-                                        <span>{{project.created_at | date : 'longDate'}}</span>
-                                    </div>
-                                </div>
+                    <div class="col-md-3" *ngFor="let project of projects">
+                        <article class="feature feature-1">
+                            <a href="#" class="block">
+                                <img alt="Image" src="{{project.images[0].url}}">
                             </a>
-                        </div>
+                            <div class="feature__body boxed boxed--border">
+                                <span>{{project.created_at | date : 'longDate'}}</span>
+                                <h5>{{project.name}}</h5>
+                                <a href="#" [routerLink]="['/project', project.id]">
+                                    Read More
+                                </a>
+                            </div>
+                        </article>
                     </div>
                 </div>
+                
 
 
 

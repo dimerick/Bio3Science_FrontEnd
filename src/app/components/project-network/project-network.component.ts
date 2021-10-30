@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { circle, Icon, LatLng, Layer, marker, Marker, point, Point, Polyline, polyline, DivIcon, DomEvent, latLng, svgOverlay, SVGOverlay, LatLngBounds, icon, divIcon, Map, ZoomAnimEvent, canvas, svg, SVG, layerGroup, LayerGroup, DomUtil, map } from 'leaflet';
+import { circle, Icon, LatLng, Layer, marker, Marker, point, Point, Polyline, polyline, DivIcon, DomEvent, latLng, svgOverlay, SVGOverlay, LatLngBounds, icon, divIcon, Map, ZoomAnimEvent, canvas, svg, SVG, layerGroup, LayerGroup, DomUtil, map, Polygon } from 'leaflet';
 import { Enlace } from 'src/app/models/enlace';
 import { LayerMap } from 'src/app/models/LayerMap';
 import { Search } from 'src/app/models/search';
@@ -244,6 +244,9 @@ export class ProjectNetworkComponent implements OnInit {
     Swal.showLoading();
     this.projectService.getNodes().subscribe(resp => {
       console.log(resp);
+      let coordsPolyNodes = [];
+      let latsNodes = [];
+      let longsNodes = [];
       resp.universities.forEach(e => {
         console.log(e);
 
@@ -264,6 +267,10 @@ export class ProjectNetworkComponent implements OnInit {
         let mark = marker([e.lat, e.long], {
           icon: myIcon,
         });//.bindPopup(e.name);
+
+        coordsPolyNodes.push([e.lat, e.long]);
+        latsNodes.push(e.lat);
+        longsNodes.push(e.long);
 
         let layerMap: LayerMap = {
           id: e.id,
@@ -306,7 +313,10 @@ export class ProjectNetworkComponent implements OnInit {
         });//.bindPopup(`<span hidden>${e.id}</span>${e.name}`);
 
         this.layers.push(mark);
-
+        
+        coordsPolyNodes.push([e.lat, e.long]);
+        latsNodes.push(e.lat);
+        longsNodes.push(e.long);
 
         mark.addEventListener('click', (layer) => {
           console.log(e);
@@ -326,6 +336,15 @@ export class ProjectNetworkComponent implements OnInit {
         }, e);
 
       });
+
+      coordsPolyNodes.push(coordsPolyNodes[0]);
+      let promLatsNodes = (latsNodes.reduce((a, b) => a + b, 0) / latsNodes.length);
+      let promLongNodes = (longsNodes.reduce((a, b) => a + b, 0) / longsNodes.length );
+
+      let polyNodes = new Polygon(coordsPolyNodes);
+      //this.mapComponent.map.setView(polyNodes.getBounds().getSouthEast(), 10);
+
+      this.mapComponent.map.setView([promLatsNodes, promLongNodes], 2);
 
       Swal.close();
 
@@ -585,10 +604,10 @@ export class ProjectNetworkComponent implements OnInit {
     let propAreaMap = areaMap / this.initAreaMap;
     let zoom = map.getZoom();
     let delta = this.initZoom - zoom;
-    let unit = 0.5;
-    if (propAreaMap > 1) {
+    let unit = 0.3 * propAreaMap;
+    /* if (propAreaMap > 1) {
       unit = unit * (propAreaMap * 0.5);
-    }
+    } */
     let propZoom = Math.pow(2, delta) * (unit / (propAreaMap));
     let lines = document.getElementsByClassName("line-network");
 
@@ -605,54 +624,41 @@ export class ProjectNetworkComponent implements OnInit {
   }
 
   arcLines(enl: Enlace): string {
-    let map = this.mapComponent.map;
-    let point1 = enl.initPoint
-    let point2 = enl.endPoint;
-    
-    let m = (point2.lng - point1.lng)/(point2.lat - point1.lat);
-    let pmx = ((point1.lat + point2.lat) / 2);
-    let pmy = ((point1.lng +point2.lng) / 2);
-
-    let angulo = ((30 * Math.PI)/180);
-
-    let pointControl = new LatLng(0, 0);
-
-    if (point2.lng < point1.lng) {
-      let pointAux = new LatLng(point1.lat, point1.lng);
-      point1.lat = point2.lat;
-      point1.lng = point2.lng;
-      point2.lat = pointAux.lat;
-      point2.lng = pointAux.lng;
-
-    }
-
-    let a = Math.sqrt(Math.pow((point1.lat-pmx), 2) + Math.pow((point1.lng-pmy), 2))
-
-    if (m < 0) {
-      console.log('pendiente negativa');
-      angulo = ((Math.acos((point1.lat-pmx)/a)) - Math.PI);
-
-    }else {
-      console.log('pendiente: ', m);
-      angulo = ((Math.acos((point1.lat-pmx)/a)) + angulo);
-    }
-
-    angulo = ((angulo * 180) / Math.PI);
-
-    pointControl.lat = pmx - (a * Math.cos(angulo));
-    pointControl.lng = pmy + (a * Math.sin(angulo));
-
-    let p1 = map.latLngToLayerPoint([point1.lat, point1.lng]);
-    let pc2 = map.latLngToLayerPoint([pointControl.lat, pointControl.lng]);
-    let p2 = map.latLngToLayerPoint([point2.lat, point2.lng]);
-
-    
+    let point1 = this.mapComponent.map.latLngToLayerPoint(enl.initPoint);
+    let point2 = this.mapComponent.map.latLngToLayerPoint(enl.endPoint);
+    let x1 = point1.x;
+    let y1 = point1.y;
+    let x2 = point2.x;
+    let y2 = point2.y;
+    let cx = (x1 + x2) / 2;
+    let cy = (y1 + y2) / 2;
+    let dx = (x2 - x1) / 2;
+    let dy = (y2 - y1) / 2;
     let items = '';
+    let n = 1;
     let color = this.colorU;
     if (enl.type == 'C') {
       color = this.colorC;
     }
-    items += `<path d='M${p1.x},${p1.y} C ${p1.x},${p1.y} ${pc2.x},${pc2.y} ${p2.x},${p2.y}' fill='none' stroke="${color}" stroke-width="7" style="cursor:pointer;pointer-events: initial;"class="line-network" id="enl-${enl.id}-${enl.priority}"/>`;
+    for (let i = 0; i < n; i++) {
+      if ((i == (n - 1) / 2) && false) {
+        items += `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" fill='none' stroke="${color}" stroke-width="5" class="line-network"/>`;
+
+      }
+      else {
+        let sentido = 1;
+        /* if (enl.type == 'C') {
+          sentido = -1;
+        } */
+        let dd = Math.sqrt(dx * dx + dy * dy);
+        // let ex = cx + dy/dd * k * (i-(n-1)/2);
+        // let ey = cy - dx/dd * k * (i-(n-1)/2);
+        let distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2))
+        let ex = (cx + dy / dd * (distance / 4) * (enl.priority * 0.5)) * sentido;
+        let ey = (cy - dx / dd * (distance / 4) * (enl.priority * 0.5));
+        items += `<path d='M${x1},${y1} Q${ex},${ey} ${x2},${y2}' fill='none' stroke="${color}" stroke-width="7" style="cursor:pointer;pointer-events: initial;"class="line-network" id="enl-${enl.id}-${enl.priority}"/>`;
+      }
+    }
 
     return items;
   }

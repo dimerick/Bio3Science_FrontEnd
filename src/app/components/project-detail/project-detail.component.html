@@ -1,7 +1,7 @@
 <section>
 
 
-<div class="container" *ngIf="project">
+<div class="container-fluid" *ngIf="project">
     <div class="col-md-12">
 
         <ol class="breadcrumbs">
@@ -17,7 +17,7 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div *ngIf="project">
 
                 <h1>{{project.name}}</h1>
@@ -40,7 +40,7 @@
             </div>
 
         </div>
-        <div class="col-md-6">
+        <div class="col-md-8">
             <div *ngIf="lat != 200 && lon != 200">
                 <app-map
                 [lat]="lat" 
