@@ -43,6 +43,8 @@ export class ProjectNetworkComponent implements OnInit {
   public colorC = '#63bb8c';
   public nodesGroup: LayerGroup;
   public initAreaMap: number;
+  public promLatsNodes: number;
+  public promLongNodes: number;
 
   public canvasIconClean = divIcon({
     iconSize: [0, 0],
@@ -110,8 +112,9 @@ export class ProjectNetworkComponent implements OnInit {
   }
 
   mapReady(e: boolean) {
-    this.getProjectNetwork();
     this.getNodes();
+    this.getProjectNetwork();
+    
   }
 
   getProjects() {
@@ -223,6 +226,7 @@ export class ProjectNetworkComponent implements OnInit {
         });
   
         this.drawEnlaces();
+        this.mapComponent.map.setView([this.promLatsNodes, this.promLongNodes], 2);
         Swal.close();
 
       }
@@ -344,7 +348,10 @@ export class ProjectNetworkComponent implements OnInit {
       let polyNodes = new Polygon(coordsPolyNodes);
       //this.mapComponent.map.setView(polyNodes.getBounds().getSouthEast(), 10);
 
-      this.mapComponent.map.setView([promLatsNodes, promLongNodes], 2);
+      console.log("promLatsNodes", promLatsNodes);
+      console.log("promLongNodes", promLongNodes);
+      this.promLatsNodes = promLatsNodes;
+      this.promLongNodes = promLongNodes;
 
       Swal.close();
 
